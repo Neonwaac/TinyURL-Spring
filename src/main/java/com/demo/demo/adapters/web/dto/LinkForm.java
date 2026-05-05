@@ -10,6 +10,7 @@ public class LinkForm {
 	private String originalUrl;
 
 	@NotBlank(message = "Por favor ingresa la URL de la imagen antes de continuar.")
+	@URL(message = "La URL de la imagen no parece ser valida. Revisa e intentalo nuevamente.")
 	private String image;
 
 	@NotBlank(message = "Por favor escribe una descripcion antes de continuar.")

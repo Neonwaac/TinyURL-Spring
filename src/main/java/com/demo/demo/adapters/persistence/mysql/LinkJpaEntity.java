@@ -24,7 +24,7 @@ public class LinkJpaEntity {
 	@Column(name = "codigo", nullable = false, length = 20)
 	private String code;
 
-	@Column(name = "url_original", nullable = false, length = 2048)
+	@Column(name = "url_original", nullable = false, columnDefinition = "TEXT")
 	private String urlOriginal;
 
 	@Column(name = "clicks", nullable = false)

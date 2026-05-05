@@ -9,6 +9,7 @@ import com.demo.demo.application.port.in.ListLinksUseCase;
 import com.demo.demo.application.port.in.RedirectLinkUseCase;
 import com.demo.demo.application.port.in.UpdateLinkMetadataUseCase;
 import com.demo.demo.application.port.in.dto.CreateLinkCommand;
+import com.demo.demo.application.port.in.dto.LinkCreatedView;
 import com.demo.demo.application.port.in.dto.LinkEditView;
 import com.demo.demo.application.port.in.dto.UpdateLinkMetadataCommand;
 import com.demo.demo.domain.exception.DuplicateLinkException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping
@@ -69,14 +71,20 @@ public class LinkController {
 	public String create(
 			@Valid @ModelAttribute("linkForm") LinkForm form,
 			BindingResult bindingResult,
-			Model model) {
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 		if (bindingResult.hasErrors()) {
 			return "index";
 		}
 		try {
-			createLinkUseCase.create(
+			LinkCreatedView created = createLinkUseCase.create(
 					new CreateLinkCommand(form.getOriginalUrl(), form.getImage(), form.getDescription()));
-			return "redirect:/links";
+			String shortUrl = buildBaseUrl(request) + "/r/" + created.getCode();
+			LinkForm responseForm = new LinkForm();
+			responseForm.setOriginalUrl(shortUrl);
+			redirectAttributes.addFlashAttribute("linkForm", responseForm);
+			redirectAttributes.addFlashAttribute("shortUrl", shortUrl);
+			return "redirect:/";
 		} catch (DuplicateLinkException ex) {
 			bindingResult.rejectValue("originalUrl", "duplicate", ex.getMessage());
 			return "index";

@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 
-@Document(collection = "link_metadata")
+@Document(collection = "links_metadata")
 public class LinkMetadataDocument {
 	@Id
 	private String code;

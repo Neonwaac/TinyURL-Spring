@@ -65,7 +65,7 @@ public class LinkService implements CreateLinkUseCase, ListLinksUseCase, Redirec
 		LinkMetadata metadata = new LinkMetadata(saved.getCode(), command.getImage(), command.getDescription(), now);
 		asyncTasks.saveMetadata(metadata);
 
-		if (command.getOriginalUrl().length() > CACHE_URL_MIN_LENGTH) {
+		if (command.getOriginalUrl().length() >= CACHE_URL_MIN_LENGTH) {
 			asyncTasks.cacheLongUrl(saved.getCode(), command.getOriginalUrl());
 		}
 

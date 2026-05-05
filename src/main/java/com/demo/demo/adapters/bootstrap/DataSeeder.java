@@ -55,27 +55,30 @@ public class DataSeeder implements CommandLineRunner {
 		);
 
 		for (SeedLink seed : seeds) {
-			boolean exists = linkRepository.existsByCode(seed.code)
-					|| linkRepository.existsByUrlOriginal(seed.originalUrl);
-			if (!exists) {
-				linkRepository.save(new Link(
-						null,
-						seed.code,
-						seed.originalUrl,
-						seed.clicks,
-						seed.active,
-						now));
+			Link existing = linkRepository.findByCode(seed.code).orElse(null);
+			if (existing == null && linkRepository.existsByUrlOriginal(seed.originalUrl)) {
+				continue;
 			}
+			Instant createdAt = existing != null ? existing.getCreatedAt() : now;
+			Long id = existing != null ? existing.getId() : null;
+			linkRepository.save(new Link(
+					id,
+					seed.code,
+					seed.originalUrl,
+					seed.clicks,
+					seed.active,
+					createdAt));
 
-			if (metadataRepository.findByCode(seed.code).isEmpty()) {
-				metadataRepository.save(new LinkMetadata(
-						seed.code,
-						seed.image,
-						seed.description,
-						now));
-			}
+			Instant metadataCreatedAt = metadataRepository.findByCode(seed.code)
+					.map(LinkMetadata::getCreatedAt)
+					.orElse(now);
+			metadataRepository.save(new LinkMetadata(
+					seed.code,
+					seed.image,
+					seed.description,
+					metadataCreatedAt));
 
-			if (seed.originalUrl.length() > CACHE_URL_MIN_LENGTH) {
+			if (seed.originalUrl.length() >= CACHE_URL_MIN_LENGTH) {
 				cachePort.put(seed.code, seed.originalUrl);
 			} else {
 				cachePort.evict(seed.code);
