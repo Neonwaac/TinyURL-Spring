@@ -2,6 +2,7 @@ package com.demo.demo.adapters.persistence.mongo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 
@@ -9,7 +10,9 @@ import java.time.Instant;
 public class LinkMetadataDocument {
 	@Id
 	private String code;
+	@Field("imagen")
 	private String image;
+	@Field("descripcion")
 	private String description;
 	private Instant createdAt;
 
