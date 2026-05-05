@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/base :: baseHead('Inicio - TinyURL')}"></th:block>
+	<style>
+		.page-header {
+			margin-bottom: 2rem;
+			text-align: center;
+		}
+
+		.page-title {
+			font-size: 1.75rem;
+			font-weight: 700;
+			color: var(--text-primary);
+			margin-bottom: 0.5rem;
+		}
+
+		.page-title span {
+			color: var(--accent-primary);
+		}
+
+		.page-subtitle {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+		}
+
+		/* Alerts */
+		.alert {
+			max-width: 520px;
+			margin: 0 auto 1.5rem;
+			padding: 0.875rem 1rem;
+			border-radius: 8px;
+			font-size: 0.875rem;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.alert svg {
+			width: 18px;
+			height: 18px;
+			flex-shrink: 0;
+		}
+
+		.alert-danger {
+			background: rgba(248, 113, 113, 0.1);
+			border: 1px solid rgba(248, 113, 113, 0.3);
+			color: #f87171;
+		}
+
+		/* Card */
+		.card {
+			background: var(--bg-card);
+			border: 1px solid var(--border-color);
+			border-radius: 12px;
+			overflow: hidden;
+			max-width: 520px;
+			margin: 0 auto;
+		}
+
+		.card-header {
+			background: var(--bg-secondary);
+			padding: 1rem 1.25rem;
+			font-weight: 600;
+			font-size: 0.9rem;
+			color: var(--text-primary);
+			border-bottom: 1px solid var(--border-color);
+			display: flex;
+			align-items: center;
+			gap: 0.625rem;
+		}
+
+		.card-header svg {
+			width: 18px;
+			height: 18px;
+			color: var(--accent-primary);
+		}
+
+		.card-body {
+			padding: 1.5rem 1.25rem;
+		}
+
+		/* Form */
+		.form-group {
+			margin-bottom: 1.25rem;
+		}
+
+		.form-group:last-of-type {
+			margin-bottom: 1.5rem;
+		}
+
+		.form-label {
+			display: block;
+			margin-bottom: 0.5rem;
+			font-weight: 500;
+			color: var(--text-secondary);
+			font-size: 0.8rem;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 0.75rem 1rem;
+			background: var(--bg-input);
+			border: 1px solid var(--border-color);
+			border-radius: 8px;
+			color: var(--text-primary);
+			font-size: 0.9rem;
+			transition: all 0.2s ease;
+			outline: none;
+		}
+
+		.form-control::placeholder {
+			color: var(--text-muted);
+		}
+
+		.form-control:focus {
+			border-color: var(--accent-primary);
+			background: var(--bg-primary);
+		}
+
+		textarea.form-control {
+			resize: vertical;
+			min-height: 70px;
+		}
+
+		.is-invalid {
+			border-color: var(--accent-red);
+		}
+
+		.field-error {
+			margin-top: 0.5rem;
+			color: var(--accent-red);
+			font-size: 0.8rem;
+		}
+
+		/* Button */
+		.btn-primary {
+			width: 100%;
+			padding: 0.875rem 1.5rem;
+			background: var(--accent-primary);
+			border: none;
+			border-radius: 8px;
+			color: #000000;
+			font-size: 0.875rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+		}
+
+		.btn-primary:hover {
+			background: #d4ff33;
+			transform: translateY(-1px);
+		}
+
+		.btn-primary:active {
+			transform: translateY(0);
+		}
+
+		.btn-primary svg {
+			width: 18px;
+			height: 18px;
+		}
+
+		/* Features */
+		.features {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+			margin-top: 2rem;
+			max-width: 520px;
+			margin: 2rem auto 0;
+		}
+
+		.feature-item {
+			background: var(--bg-card);
+			border: 1px solid var(--border-color);
+			border-radius: 10px;
+			padding: 1.25rem 1rem;
+			text-align: center;
+			transition: all 0.2s ease;
+		}
+
+		.feature-item:hover {
+			border-color: var(--border-hover);
+			background: var(--bg-card-hover);
+		}
+
+		.feature-icon {
+			width: 36px;
+			height: 36px;
+			margin: 0 auto 0.75rem;
+			color: var(--accent-primary);
+		}
+
+		.feature-title {
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: var(--text-primary);
+			margin-bottom: 0.25rem;
+		}
+
+		.feature-desc {
+			font-size: 0.7rem;
+			color: var(--text-muted);
+		}
+
+		@media (max-width: 576px) {
+			.features {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div th:replace="~{fragments/base :: navbar('home')}"></div>
+	<div class="container">
+		<div class="page-header">
+			<h1 class="page-title">Acortador de <span>Enlaces</span></h1>
+			<p class="page-subtitle">Crea enlaces cortos y personalizados de forma rapida</p>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<circle cx="12" cy="12" r="10"/>
+					<line x1="12" y1="8" x2="12" y2="16"/>
+					<line x1="8" y1="12" x2="16" y2="12"/>
+				</svg>
+				Crear Nuevo Enlace
+			</div>
+			<div class="card-body">
+				<form th:action="@{/}" th:object="${linkForm}" method="post">
+					<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('*')}">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<circle cx="12" cy="12" r="10"/>
+							<line x1="15" y1="9" x2="9" y2="15"/>
+							<line x1="9" y1="9" x2="15" y2="15"/>
+						</svg>
+						Por favor revisa los campos resaltados antes de continuar.
+					</div>
+					<div class="form-group">
+						<label for="originalUrl" class="form-label">URL Original</label>
+						<input type="url"
+								   class="form-control"
+								   th:classappend="${#fields.hasErrors('originalUrl')} ? ' is-invalid' : ''"
+								   id="originalUrl"
+								   th:field="*{originalUrl}"
+								   placeholder="https://ejemplo.com/mi-pagina-larga">
+						<div class="field-error" th:if="${#fields.hasErrors('originalUrl')}" th:errors="*{originalUrl}"></div>
+					</div>
+					<div class="form-group">
+						<label for="image" class="form-label">URL de Imagen</label>
+						<input type="url"
+								   class="form-control"
+								   th:classappend="${#fields.hasErrors('image')} ? ' is-invalid' : ''"
+								   id="image"
+								   th:field="*{image}"
+								   placeholder="https://ejemplo.com/imagen.jpg">
+						<div class="field-error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></div>
+					</div>
+					<div class="form-group">
+						<label for="description" class="form-label">Descripcion</label>
+						<textarea class="form-control"
+								  th:classappend="${#fields.hasErrors('description')} ? ' is-invalid' : ''"
+								  id="description"
+								  th:field="*{description}"
+								  rows="2"
+								  placeholder="Breve descripcion del enlace"></textarea>
+						<div class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+					</div>
+					<button type="submit" class="btn-primary">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+							<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+						</svg>
+						Acortar Enlace
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="features">
+			<div class="feature-item">
+				<svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<circle cx="12" cy="12" r="10"/>
+					<polyline points="12,6 12,12 16,14"/>
+				</svg>
+				<div class="feature-title">Rapido</div>
+				<div class="feature-desc">Enlaces al instante</div>
+			</div>
+			<div class="feature-item">
+				<svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+					<polyline points="17,8 12,3 7,8"/>
+					<line x1="12" y1="3" x2="12" y2="15"/>
+				</svg>
+				<div class="feature-title">Trackeo</div>
+				<div class="feature-desc">Estadisticas de clicks</div>
+			</div>
+			<div class="feature-item">
+				<svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+					<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+				</svg>
+				<div class="feature-title">Seguro</div>
+				<div class="feature-desc">Enlaces confiables</div>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/base :: menuScript}"></th:block>
+</body>
+</html>

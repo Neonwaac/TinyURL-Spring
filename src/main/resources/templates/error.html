@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="~{fragments/base :: baseHead('Error - TinyURL')}"></th:block>
+	<style>
+		.error-wrapper {
+			max-width: 520px;
+			margin: 3rem auto 0;
+			background: var(--bg-card);
+			border: 1px solid var(--border-color);
+			border-radius: 12px;
+			padding: 2rem 1.5rem;
+			text-align: center;
+		}
+
+		.error-title {
+			font-size: 1.4rem;
+			font-weight: 700;
+			margin-bottom: 0.75rem;
+		}
+
+		.error-message {
+			color: var(--text-secondary);
+			font-size: 0.95rem;
+		}
+
+		.error-action {
+			margin-top: 1.5rem;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.5rem 1rem;
+			border-radius: 8px;
+			background: var(--accent-primary);
+			color: #000000;
+			text-decoration: none;
+			font-weight: 600;
+		}
+	</style>
+</head>
+<body>
+	<div th:replace="~{fragments/base :: navbar('none')}"></div>
+	<div class="container">
+		<div class="error-wrapper">
+			<h1 class="error-title">Lo sentimos, hubo un problema</h1>
+			<p class="error-message" th:text="${message}"></p>
+			<a class="error-action" th:href="@{/}">Volver al inicio</a>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/base :: menuScript}"></th:block>
+</body>
+</html>
